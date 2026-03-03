@@ -119,8 +119,7 @@ export default function WaitlistPage() {
   const [selectedAthlete, setSelectedAthlete] = useState<string | null>(null)
 
   const athletes = [
-    { id: '1', name: 'Hayden Ohmes', initials: 'HO', birthYear: '2016' },
-    { id: '2', name: 'Lena Lankas', initials: 'LL', birthYear: '2015' },
+    { id: '1', name: 'John Doe', initials: 'JD', birthYear: '2016' },
   ]
 
   return (

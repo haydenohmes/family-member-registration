@@ -308,14 +308,7 @@ export default function Registration() {
                 <div className="flex gap-0 items-center relative shrink-0">
                   <div className="relative shrink-0 size-[32px]">
                     <div className="bg-[#506277] border border-white border-solid flex items-center justify-center size-full rounded-full">
-                      <span className="text-white text-xs font-bold tracking-[-0.558px]">HO</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex gap-0 items-center relative shrink-0">
-                  <div className="relative shrink-0 size-[32px]">
-                    <div className="bg-[#506277] border border-white border-solid flex items-center justify-center size-full rounded-full">
-                      <span className="text-white text-xs font-bold tracking-[-0.558px]">LL</span>
+                      <span className="text-white text-xs font-bold tracking-[-0.558px]">JD</span>
                     </div>
                   </div>
                 </div>
@@ -340,7 +333,7 @@ export default function Registration() {
                   title="Boys & Girls Stripes | Ages: 13-14 (Parent - Child)"
                   startDate="Sep 24, 2025"
                   endDate="Sep 28, 2025"
-                  eligibleAthletes={["Hayden Ohmes", "Lena Lankas"]}
+                  eligibleAthletes={["John Doe"]}
                   showAddAthlete={true}
                   onJoinWaitlist={() => {
                     localStorage.setItem('currentRegistration', "Boys & Girls Stripes | Ages: 13-14 (Parent - Child)")
@@ -354,7 +347,7 @@ export default function Registration() {
                   title="Boys & Girls Stripes | Ages: 14-15 (Parent - Child)"
                   startDate="Sep 24, 2025"
                   endDate="Sep 28, 2025"
-                  eligibleAthletes={[]}
+                  eligibleAthletes={["John Doe"]}
                   showAddAthlete={true}
                   onJoinWaitlist={() => {
                     localStorage.setItem('currentRegistration', "Boys & Girls Stripes | Ages: 14-15 (Parent - Child)")

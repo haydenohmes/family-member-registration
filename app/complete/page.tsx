@@ -56,7 +56,7 @@ type EmailStatus = "idle" | "sending" | "sent" | "error"
 
 export default function CompletePage() {
   const router = useRouter()
-  const [athleteName, setAthleteName] = useState<string>("Your athlete")
+  const [athleteName, setAthleteName] = useState<string>("John Doe")
   const [programName, setProgramName] = useState<string>("this registration")
   const [emailStatus, setEmailStatus] = useState<EmailStatus>("idle")
   const [confirmationEmail, setConfirmationEmail] = useState<string>("")
@@ -90,7 +90,7 @@ export default function CompletePage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          athleteName: selectedAthlete?.name ?? "Your athlete",
+          athleteName: selectedAthlete?.name ?? "John Doe",
           programName: currentRegistration,
           email: email ?? "",
         }),

@@ -51,14 +51,15 @@ function DesktopNavbar({ className, isAuth = false }: DesktopNavbarProps) {
   )
 }
 
-type InputFieldProps = {
+type TextFieldProps = {
   label: string
   placeholder?: string
   required?: boolean
-  helpText?: string
+  value: string
+  onChange: (value: string) => void
 }
 
-function InputField({ label, placeholder = "Placeholder", required = true, helpText }: InputFieldProps) {
+function TextField({ label, placeholder = "Placeholder", required = true, value, onChange }: TextFieldProps) {
   return (
     <div className="flex flex-col gap-[var(--space-quarter,4px)] items-start relative w-full">
       <div className="flex gap-[var(--space-eighth,2px)] items-start leading-none relative shrink-0 w-full">
@@ -71,22 +72,14 @@ function InputField({ label, placeholder = "Placeholder", required = true, helpT
           </p>
         )}
       </div>
-      <button className="bg-[#fefefe] border border-[#c4c6c8] border-solid cursor-pointer flex items-center min-h-[40px] overflow-clip px-[var(--space-one,16px)] py-0 relative rounded-[2px] shrink-0 w-full">
-        <div className="flex flex-1 flex-col justify-center leading-[0] min-h-px min-w-px overflow-hidden relative text-ellipsis text-left whitespace-nowrap">
-          <p className="leading-[1.15] overflow-hidden text-[16px]" style={{ color: '#607081', fontFamily: 'var(--font-body, Barlow), sans-serif' }}>
-            {placeholder}
-          </p>
-        </div>
-      </button>
-      {helpText && (
-        <div className="flex gap-0 items-center justify-center relative shrink-0 w-full">
-          <div className="flex flex-1 flex-col justify-center leading-[0] min-h-px min-w-px relative">
-            <p className="leading-[1.4] whitespace-pre-wrap text-[12px]" style={{ color: '#506277', fontFamily: 'var(--font-body, Barlow), sans-serif' }}>
-              {helpText}
-            </p>
-          </div>
-        </div>
-      )}
+      <input
+        type="text"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        className="bg-[#fefefe] border border-[#c4c6c8] border-solid flex items-center min-h-[40px] overflow-clip px-[var(--space-one,16px)] py-0 relative rounded-[2px] shrink-0 w-full text-[16px] outline-none focus:border-[#0273e3]"
+        style={{ color: '#36485c', fontFamily: 'var(--font-body, Barlow), sans-serif' }}
+      />
     </div>
   )
 }
@@ -137,72 +130,16 @@ function EmailField({
   )
 }
 
-type PanelProps = {
-  title: string
-  description?: string
-  inputs: InputFieldProps[]
-}
-
-function Panel({ title, description, inputs }: PanelProps) {
-  return (
-    <div className="flex flex-col gap-[var(--space-one-and-quarter,20px)] items-start relative shrink-0 w-full">
-      <div className="flex flex-col gap-[var(--size-small,4px)] items-start relative shrink-0 tracking-normal w-full">
-        <div className="flex flex-col justify-center leading-[0] min-w-full relative shrink-0 w-[min-content]" style={{ color: '#c0c6cd', fontSize: 'var(--font-size-plus-one, 18px)', fontFamily: 'var(--u-font-body, Barlow), sans-serif', fontWeight: 'bold' }}>
-          <p className="leading-[1.4] whitespace-pre-wrap">{title}</p>
-        </div>
-        {description && (
-          <p className="leading-[1.4] relative shrink-0" style={{ color: '#85909e', fontSize: 'var(--font-size-minus-one, 14px)', fontFamily: 'var(--u-font-body, Barlow), sans-serif' }}>
-            {description}
-          </p>
-        )}
-      </div>
-      <div className="flex flex-col gap-[var(--space-one-and-quarter,20px)] items-start overflow-clip relative shrink-0 w-full">
-        {inputs.map((input, index) => (
-          <InputField key={index} {...input} />
-        ))}
-      </div>
-    </div>
-  )
-}
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export default function QuestionsPage() {
   const router = useRouter()
   const [confirmationEmail, setConfirmationEmail] = useState("")
-
-  const panels: PanelProps[] = [
-    {
-      title: "Athlete Information",
-      description: "Please provide basic information about the athlete joining the waitlist.",
-      inputs: [
-        { label: "Preferred Position", placeholder: "e.g., Forward, Midfielder, Defender, Goalkeeper", required: true },
-        { label: "Years of Soccer Experience", placeholder: "e.g., 3 years", required: true },
-        { label: "Previous Team or Club", placeholder: "e.g., Local Youth League", required: false },
-        { label: "Jersey Number Preference", placeholder: "e.g., 7, 10, 23", required: false },
-      ],
-    },
-    {
-      title: "Emergency Contact",
-      description: "Contact information for emergencies during program activities.",
-      inputs: [
-        { label: "Emergency Contact Name", placeholder: "Full name", required: true },
-        { label: "Emergency Contact Phone", placeholder: "(555) 123-4567", required: true },
-        { label: "Relationship to Athlete", placeholder: "e.g., Parent, Guardian, Grandparent", required: true },
-        { label: "Alternate Emergency Contact Phone", placeholder: "(555) 987-6543", required: false },
-      ],
-    },
-    {
-      title: "Medical & Dietary Information",
-      description: "Help us ensure the safety and well-being of all participants.",
-      inputs: [
-        { label: "Medical Conditions or Allergies", placeholder: "e.g., Asthma, Peanut allergy, None", required: false },
-        { label: "Dietary Restrictions", placeholder: "e.g., Vegetarian, Gluten-free, None", required: false },
-        { label: "Medications (if any)", placeholder: "List any medications the athlete takes", required: false },
-        { label: "Insurance Provider", placeholder: "e.g., Blue Cross Blue Shield", required: false },
-      ],
-    },
-  ]
+  const [preferredPosition, setPreferredPosition] = useState("")
+  const [yearsExperience, setYearsExperience] = useState("")
+  const [previousTeam, setPreviousTeam] = useState("")
+  const [jerseyNumber, setJerseyNumber] = useState("")
 
   return (
     <div className="bg-[var(--u-color-background-canvas,#191f24)] flex flex-col gap-0 isolate items-start overflow-clip relative rounded-[12px] min-h-screen w-full">
@@ -242,9 +179,41 @@ export default function QuestionsPage() {
                   helpText="You’ll receive an email when a spot opens up."
                 />
               </div>
-              {panels.map((panel, index) => (
-                <Panel key={index} {...panel} />
-              ))}
+              <div className="flex flex-col gap-[var(--space-one-and-quarter,20px)] items-start relative shrink-0 w-full">
+                <div className="flex flex-col justify-center leading-[0] min-w-full relative shrink-0 w-[min-content]" style={{ color: '#c0c6cd', fontSize: 'var(--font-size-plus-one, 18px)', fontFamily: 'var(--u-font-body, Barlow), sans-serif', fontWeight: 'bold' }}>
+                  <p className="leading-[1.4] whitespace-pre-wrap">Athlete Information</p>
+                </div>
+                <div className="flex flex-col gap-[var(--space-one-and-quarter,20px)] items-start overflow-clip relative shrink-0 w-full">
+                  <TextField
+                    label="Preferred Position"
+                    placeholder="e.g., Forward, Midfielder, Defender, Goalkeeper"
+                    required
+                    value={preferredPosition}
+                    onChange={setPreferredPosition}
+                  />
+                  <TextField
+                    label="Years of Soccer Experience"
+                    placeholder="e.g., 3 years"
+                    required
+                    value={yearsExperience}
+                    onChange={setYearsExperience}
+                  />
+                  <TextField
+                    label="Previous Team or Club"
+                    placeholder="e.g., Local Youth League"
+                    required={false}
+                    value={previousTeam}
+                    onChange={setPreviousTeam}
+                  />
+                  <TextField
+                    label="Jersey Number Preference"
+                    placeholder="e.g., 7, 10, 23"
+                    required={false}
+                    value={jerseyNumber}
+                    onChange={setJerseyNumber}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
