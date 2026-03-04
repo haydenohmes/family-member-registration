@@ -53,9 +53,7 @@ function CheckoutPageContent() {
   const athlete = searchParams.get("athlete") ?? ""
   const athleteName = athlete ? decodeURIComponent(athlete) : "John Doe"
 
-  const [parentEmail, setParentEmail] = useState("")
   const [agree, setAgree] = useState(false)
-  const [sending, setSending] = useState(false)
 
   const [nameOnCard, setNameOnCard] = useState("")
   const [cardNumber, setCardNumber] = useState("")
@@ -69,33 +67,11 @@ function CheckoutPageContent() {
   const total = registrationTotal + transactionFee
   const transactionId = "TXN-" + Math.random().toString(36).slice(2, 10).toUpperCase()
 
-  const handleFinish = async () => {
-    const email = parentEmail.trim()
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      alert("Please enter a valid email for the confirmation.")
-      return
-    }
-    setSending(true)
-    try {
-      const base = typeof window !== "undefined" ? window.location.origin : ""
-      const res = await fetch(`${base}/api/send-registration-confirmation`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          to: email,
-          subject: "Registration confirmation",
-          html: `<p>Your registration for ${programTitle} – ${athleteName} has been completed.</p>`,
-        }),
-      })
-      const data = await res.json().catch(() => ({}))
-      if (!res.ok) {
-        alert(data.error || "Failed to send confirmation email")
-        return
-      }
-      alert("Registration complete. A confirmation email has been sent.")
-    } finally {
-      setSending(false)
-    }
+  const handlePlaceOrder = () => {
+    const params = new URLSearchParams()
+    params.set("program", programSlug)
+    if (athlete) params.set("athlete", athlete)
+    router.push(`/checkout/complete?${params.toString()}`)
   }
 
   return (
@@ -138,18 +114,6 @@ function CheckoutPageContent() {
               <section className="flex-1 min-w-0">
                   <h2 className="text-lg font-semibold text-white mb-4">Payment Information</h2>
                   <div className="space-y-4">
-                    <div>
-                      <label className="text-[#c0c6cd] text-sm">
-                        Email for confirmation <span className="text-red-400">*</span>
-                      </label>
-                      <input
-                        type="email"
-                        placeholder="your@email.com"
-                        value={parentEmail}
-                        onChange={(e) => setParentEmail(e.target.value)}
-                        className={inputClass}
-                      />
-                    </div>
                     <div>
                       <label className="text-[#c0c6cd] text-sm">
                         Name on Card <span className="text-red-400">*</span>
@@ -272,12 +236,11 @@ function CheckoutPageContent() {
           </button>
           <button
             type="button"
-            onClick={() => handleFinish()}
-            disabled={sending}
-            className="bg-[#0273e3] text-white hover:bg-[#0260c4] min-h-[40px] px-[var(--space-one,16px)] rounded-[var(--border-radius-large,4px)] cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={() => handlePlaceOrder()}
+            className="bg-[#0273e3] text-white hover:bg-[#0260c4] min-h-[40px] px-[var(--space-one,16px)] rounded-[var(--border-radius-large,4px)] cursor-pointer transition-colors"
             style={{ fontFamily: "var(--font-body, Barlow), sans-serif", fontSize: "var(--font-size-default, 16px)", fontWeight: "bold" }}
           >
-            {sending ? "Sending…" : "Finish"}
+            Place Order
           </button>
         </div>
       </div>
